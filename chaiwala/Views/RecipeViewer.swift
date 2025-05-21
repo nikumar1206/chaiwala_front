@@ -33,7 +33,7 @@ struct ShareButton: View {
                     .font(.custom("Winky Sans", size: 16))
                     .fontWeight(.medium)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: 200)
             .padding()
             .background(ChaiColors.kadakGreen) // Updated background to kadakGreen
             .foregroundColor(.white)
@@ -61,7 +61,7 @@ struct ShareButton: View {
 struct RecipeViewer: View {
     let recipe: RecipeWSteps
     @State private var isFavorite: Bool = false
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.presentationMode) var presentationMode
     @State private var activeTab: Int = 0
     
     var body: some View {
@@ -87,7 +87,8 @@ struct RecipeViewer: View {
                     // Navigation and favorite buttons
                     HStack {
                         Button(action: {
-                            dismiss()
+                            print("button clicked")
+                            presentationMode.wrappedValue.dismiss()
                         }) {
                             Image(systemName: "arrow.left")
                                 .font(.custom("Winky Sans", size: 18))
@@ -150,7 +151,7 @@ struct RecipeViewer: View {
                     }
                 }
                 .padding(.horizontal, 20)
-                .padding(.vertical, 16) // Added vertical padding
+                .padding(.vertical, 12) // Added vertical padding
                 
                 // Tab selection
                 HStack(spacing: 0) {
@@ -198,19 +199,20 @@ struct RecipeViewer: View {
                                     .foregroundColor(ChaiColors.cinnamonBrown)
                                 
                                 VStack(spacing: 16) {
-                                VStack(spacing: 12) { // Reduced spacing for a cleaner look
-                                    InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
-                                    InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
-                                    InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
-                                    InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
+                                    VStack(spacing: 12) { // Reduced spacing for a cleaner look
+                                        InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
+                                        InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
+                                        InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
+                                        InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
+                                    }
                                 }
+                                
+                                // Share button
+                                ShareButton(recipe: recipe) // Re-using the updated ShareButton
+                                    .padding(.top, 8)
                             }
-                            
-                            // Share button
-                            ShareButton(recipe: recipe) // Re-using the updated ShareButton
-                                .padding(.top, 8)
                         }
-                    } else {
+                    }else {
                         // Instructions tab
                         VStack(alignment: .leading, spacing: 28) {
                             Text("Step-by-Step Instructions")

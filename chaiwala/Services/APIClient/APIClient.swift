@@ -6,10 +6,10 @@
 //
 import Foundation
 import SwiftUI
-
+import OSLog
 class APIClient {
     static let shared = APIClient()
-    static let host = ProcessInfo.processInfo.environment["HOST"] ?? ""
+    static let host = "https://chaiwala.up.railway.app"
     private init() {}
 
     func request<T: Decodable, U: Encodable>(
@@ -22,7 +22,7 @@ class APIClient {
             return .failure(.invalidURL)
         }
 
-        print("request: \(method) \(url)")
+        os_log("request: \(method) \(url)")
 
         var request = URLRequest(url: url)
         request.httpMethod = method

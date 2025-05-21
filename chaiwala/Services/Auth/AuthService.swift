@@ -18,6 +18,7 @@ class AuthService {
             body: req
         )
         
+        
         return res.flatMap { authResponse in
             do {
                 try KeychainHelper.shared.set(authResponse.token.accessToken, forKey: "accessToken")
