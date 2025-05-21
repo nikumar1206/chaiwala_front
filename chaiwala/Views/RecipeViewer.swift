@@ -420,7 +420,7 @@ struct StepView: View {
             PreparationStepSerializable(stepNumber: 2 , description: "Add tea leaves and milk.", assetId: nil),
             PreparationStepSerializable(stepNumber: 3 ,description: "Simmer and strain.", assetId: nil)
         ],
-        
+        type: TeaType.black.rawValue,
         assetId: "fd2de44e-6952-48be-9497-c5d3a8fef955",
         prepTimeMinutes: 5,
         servings: 2,
