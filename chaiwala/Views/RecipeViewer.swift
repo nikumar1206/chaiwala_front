@@ -35,7 +35,7 @@ struct ShareButton: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(ChaiColors.orangeAccent) // Updated background
+            .background(ChaiColors.kadakGreen) // Updated background to kadakGreen
             .foregroundColor(.white)
             .cornerRadius(10)
         }
@@ -92,7 +92,7 @@ struct RecipeViewer: View {
                             Image(systemName: "arrow.left")
                                 .font(.custom("Winky Sans", size: 18))
                                 .fontWeight(.medium)
-                                .foregroundColor(ChaiColors.cinnamonBrown) // Updated color
+                                .foregroundColor(ChaiColors.kadakGreen) // Changed to kadakGreen
                         }
                         .frame(width: 44, height: 44)
                         .background(Color.black.opacity(0.1)) // Subtle background for visibility
@@ -108,13 +108,14 @@ struct RecipeViewer: View {
                             Image(systemName: isFavorite ? "heart.fill" : "heart")
                                 .font(.custom("Winky Sans", size: 18))
                                 .fontWeight(.medium)
-                                .foregroundColor(isFavorite ? ChaiColors.orangeAccent : ChaiColors.warmCream) // Updated colors
+                                .foregroundColor(isFavorite ? ChaiColors.kadakGreen : ChaiColors.warmCream) // Active state to kadakGreen
                         }
                         .frame(width: 44, height: 44)
                         .background(Color.black.opacity(0.1)) // Subtle background for visibility
                         .clipShape(Circle())
                         .contentShape(Rectangle())
                     }
+                    .zIndex(1) // Ensure buttons are on top
                     .padding(.horizontal, 16) // Adjusted padding
                     .padding(.top, (UIApplication.shared.connectedScenes
                         .compactMap { ($0 as? UIWindowScene)?.keyWindow }
@@ -197,18 +198,17 @@ struct RecipeViewer: View {
                                     .foregroundColor(ChaiColors.cinnamonBrown)
                                 
                                 VStack(spacing: 16) {
-                                    VStack(spacing: 12) { // Reduced spacing for a cleaner look
-                                        InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
-                                        InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
-                                        InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
-                                        InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
-                                    }
+                                VStack(spacing: 12) { // Reduced spacing for a cleaner look
+                                    InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
+                                    InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
+                                    InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
+                                    InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
                                 }
-                                
-                                // Share button
-                                ShareButton(recipe: recipe) // Re-using the updated ShareButton
-                                    .padding(.top, 8)
                             }
+                            
+                            // Share button
+                            ShareButton(recipe: recipe) // Re-using the updated ShareButton
+                                .padding(.top, 8)
                         }
                     } else {
                         // Instructions tab
@@ -254,12 +254,12 @@ struct TabButton: View {
                 Text(title)
                     .font(.custom("Winky Sans", size: 16)) // Adjusted size to match TabButtonV2 more closely if needed
                     .fontWeight(isSelected ? .semibold : .regular) // Match TabButtonV2
-                    .foregroundColor(isSelected ? ChaiColors.cinnamonBrown : Color(.systemGray)) // Match TabButtonV2
+                    .foregroundColor(isSelected ? ChaiColors.kadakGreen : Color(.systemGray)) // Selected text to kadakGreen
                     .padding(.vertical, 12) // Match TabButtonV2
                 
                 if isSelected {
                     Rectangle()
-                        .fill(ChaiColors.cinnamonBrown) // Match TabButtonV2 selected state
+                        .fill(ChaiColors.kadakGreen) // Selected underline to kadakGreen
                         .frame(height: 2) // Match TabButtonV2
                 } else {
                     Rectangle()
@@ -283,7 +283,7 @@ struct InfoDetailRow: View {
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: image)
-                .foregroundColor(iconColor)
+                .foregroundColor(ChaiColors.kadakGreen) // Standardized icon color to kadakGreen
                 .font(.custom("Winky Sans", size: 16))
                 .frame(width: 20, alignment: .center) // Align icons
             
@@ -324,7 +324,7 @@ struct StepView: View {
                 // Step number with gradient background
                 ZStack {
                     Circle()
-                        .fill(ChaiColors.orangeAccent) // Solid color fill
+                        .fill(ChaiColors.kadakGreen) // Changed fill to kadakGreen
                         .frame(width: 34, height: 34)
                     
                     Text("\(step.stepNumber)")
