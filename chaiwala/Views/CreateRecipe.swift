@@ -12,8 +12,7 @@ struct RecipeCreationView: View {
     @State private var recipeTitle: String = ""
     @State private var description: String = ""
     @State private var prepTime: String = ""
-    @State private var recipeType: String = ""
-    @State private var ingredients: String = ""
+    @State private var recipeType: TeaType = TeaType.black
     @State private var selectedImage: UIImage?
     @State private var showingImagePicker = false
     @State private var selectedItem: PhotosPickerItem? = nil
@@ -34,46 +33,7 @@ struct RecipeCreationView: View {
                     
                     Button(action: {
                         Task {
-                            var assetId = ""
-                            
-                            if let imageData = selectedImageData {
-                                let uploadResult = await APIClient.shared.uploadFile(
-                                    path: "/files",
-                                    fileData: imageData,
-                                )
-
-                                switch uploadResult {
-                                case .success(let fileResponse):
-                                    assetId = fileResponse.FileId //
-                                case .failure(let error):
-                                    print("Failed to upload recipe image:", error)
-                                    // Optionally show a user alert here
-                                    return
-                                }
-                            }
-                            
-                            // Now create the Recipe
-                            let r = RecipeDraft(
-                                id: nil,
-                                title: self.recipeTitle,
-                                description: self.description,
-                                steps: [], // you can wire this later
-                                assetId: assetId,
-                                prepTimeMinutes: Int(self.prepTime) ?? 0,
-                                servings: 1,
-                                isPublic: true
-                            )
-                            
-                            let res = await RecipeService.shared.createRecipe(r: r)
-                            
-                            switch res {
-                            case .success:
-                                print("Recipe created successfully")
-                                // Maybe navigate back or show success?
-                            case .failure(let error):
-                                print("Failed to create recipe:", error)
-                                // Maybe show an error
-                            }
+                            await uploadStepsAndCreateRecipe(recipeTitle: self.recipeTitle, description: self.description, prepTime: Int(self.prepTime) ?? 0, type: self.recipeType, selectedImageData: self.selectedImageData, preparationSteps: self.preparationSteps)
                         }
                     }) {
                         Text("Save")
@@ -190,29 +150,12 @@ struct RecipeCreationView: View {
                             .cornerRadius(8)
                             .keyboardType(.numberPad)
                     }
-                    
                     VStack(alignment: .leading, spacing: 8) {
                         Text("Type")
                             .fontWeight(.medium)
-                        
-                        TextField("", text: $recipeType)
-                            .padding()
-                            .background(warmCream)
-                            .cornerRadius(8)
+    
+                        TeaTypeDropDown(selectedTea: $recipeType)
                     }
-                }
-                .padding(.horizontal)
-                
-                // Ingredients
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Ingredients")
-                        .fontWeight(.medium)
-                    
-                    TextEditor(text: $ingredients)
-                        .frame(height: 100)
-                        .padding(4)
-                        .background(warmCream)
-                        .cornerRadius(8)
                 }
                 .padding(.horizontal)
                 
@@ -225,6 +168,79 @@ struct RecipeCreationView: View {
         }
     }
 }
+
+
+func uploadStepsAndCreateRecipe(recipeTitle: String, description: String, prepTime: Int, type: TeaType, selectedImageData: Data?, preparationSteps: [PreparationStep]) async {
+    var assetId = ""
+
+    // Upload recipe image if available
+    if let imageData = selectedImageData {
+        let uploadResult = await APIClient.shared.uploadFile(
+            path: "/files",
+            fileData: imageData
+        )
+
+        switch uploadResult {
+        case .success(let fileResponse):
+            assetId = fileResponse.FileId
+        case .failure(let error):
+            print("Failed to upload recipe image:", error)
+            return
+        }
+    }
+
+    // Upload each step image (if any) and build DTO list
+    var stepDTOs: [PreparationStepSerializable] = []
+    
+    for step in preparationSteps {
+        var fileId: String? = nil
+
+        if let data = step.imageData {
+            let uploadResult = await APIClient.shared.uploadFile(path: "/files", fileData: data)
+            switch uploadResult {
+            case .success(let fileResponse):
+                fileId = fileResponse.FileId
+            case .failure(let error):
+                print("Failed to upload image for step \(step.stepNumber):", error)
+                return
+            }
+        }
+
+        stepDTOs.append(
+            PreparationStepSerializable(
+                stepNumber: step.stepNumber,
+                description: step.description,
+                assetId: fileId
+            )
+        )
+    }
+
+    // Construct the RecipeDraft
+    let recipe = RecipeDraft(
+        id: nil,
+        title: recipeTitle,
+        description: description,
+        steps: stepDTOs,
+        teaType: Int(type.rawValue),
+        assetId: assetId,
+        prepTimeMinutes: prepTime,
+        servings: 1,
+        isPublic: true
+    )
+
+    // Fire create API
+    let result = await RecipeService.shared.createRecipe(r: recipe)
+
+    switch result {
+    case .success:
+        print("Recipe created successfully")
+        // Show toast or navigate
+    case .failure(let error):
+        print("Failed to create recipe:", error)
+        // Show error alert
+    }
+}
+
 
 #Preview {
     RecipeCreationView()

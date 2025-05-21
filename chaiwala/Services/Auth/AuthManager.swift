@@ -21,7 +21,7 @@ class AuthManager {
                 return
             }
 
-            let loginView = LoginView()
+            let loginView = RegisterLoginView()
             let hostingController = UIHostingController(rootView: loginView)
 
             // Set the root view controller to the LoginView

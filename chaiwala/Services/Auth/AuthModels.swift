@@ -8,12 +8,11 @@
 import Foundation
 
 struct LoginRequest: Codable {
-    let username: String
+    let email: String
     let password: String
 }
 
 struct RegisterRequest: Codable {
-    let name: String
     let email: String
     let password: String
 }
@@ -33,7 +32,6 @@ struct Token: Codable {
 // Define the User struct that corresponds to the Go `User` struct
 struct User: Codable {
     let id: Int32
-    let username: String
     let email: String
     let bio: String
     let avatarUrl: String

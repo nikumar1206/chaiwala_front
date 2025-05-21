@@ -36,6 +36,22 @@ extension Color {
 }
 
 
+class CustomColor {
+    let deepAmber = Color(hex: "C17A0F")      // Primary color - rich tea
+    let softChai = Color(hex: "B98A3E")           // New Primary - soft amber chai tone
+    let warmCream = Color(hex: "F7F3E3")          // Secondary - milk tone
+    let cinnamonBrown = Color(hex: "8C4A2F")      // Accent - warm depth
+    let forestGreen = Color(hex: "2D4739")        // Accent - tea leaves
+    let terracotta = Color(hex: "BF6B63")         // Accent - subtle highlight
+    let backgroundCream = Color(hex: "FAF7F2")    // Background - light and calming
+    let orangeAccent = Color(hex: "#FF9933")
+    let malai = Color(hex: "#FFF6E5")
+    let saffronGold = Color(hex: "E6B653")
+    let cardamomGreen = Color(hex: "3F5E49")
+    let kadakGreen = Color(hex: "2B3F32")
+    let kashmiriPink = Color(hex: "E7B2AC")
+}
+let ChaiColors = CustomColor()
 
 let deepAmber = Color(hex: "C17A0F")      // Primary color - rich tea
 let softChai = Color(hex: "B98A3E")           // New Primary - soft amber chai tone
@@ -44,3 +60,4 @@ let cinnamonBrown = Color(hex: "8C4A2F")      // Accent - warm depth
 let forestGreen = Color(hex: "2D4739")        // Accent - tea leaves
 let terracotta = Color(hex: "BF6B63")         // Accent - subtle highlight
 let backgroundCream = Color(hex: "FAF7F2")    // Background - light and calming
+let orangeAccent = Color(hex: "#FF9933")

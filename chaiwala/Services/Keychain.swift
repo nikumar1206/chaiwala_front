@@ -76,7 +76,7 @@ class KeychainHelper {
         var dataTypeRef: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &dataTypeRef)
         if status == errSecSuccess, let data = dataTypeRef as? Data {
-            print("we hit this", data)
+            print("got \(key) from keychain", data)
             return String(data: data, encoding: .utf8)
         }
         

@@ -345,10 +345,10 @@ struct InfoCard: View {
 // Updated to use PreparationStepSerializable instead of string parsing
 struct StepByStepInstructions: View {
     let steps: [PreparationStepSerializable]
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 26) {
-            ForEach(steps.sorted(by: { $0.stepNumber < $1.stepNumber })) { step in
+            ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
                 StepView(step: step)
             }
         }
@@ -416,9 +416,9 @@ struct StepView: View {
         title: "Masala Chai",
         description: "A flavorful Indian spiced tea.",
         steps:  [
-            PreparationStepSerializable(id: 1, stepNumber: 1, description: "Boil water and spices.", assetId: nil),
-            PreparationStepSerializable(id:2 ,stepNumber: 2 , description: "Add tea leaves and milk.", assetId: nil),
-            PreparationStepSerializable(id: 3, stepNumber: 3 ,description: "Simmer and strain.", assetId: nil)
+            PreparationStepSerializable( stepNumber: 1, description: "Boil water and spices.", assetId: nil),
+            PreparationStepSerializable(stepNumber: 2 , description: "Add tea leaves and milk.", assetId: nil),
+            PreparationStepSerializable(stepNumber: 3 ,description: "Simmer and strain.", assetId: nil)
         ],
         
         assetId: "fd2de44e-6952-48be-9497-c5d3a8fef955",

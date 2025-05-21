@@ -16,6 +16,13 @@ struct PreparationStep: Identifiable {
     var imageData: Data?
 }
 
+struct PreparationStepDTO: Codable {
+    var stepNumber: Int
+    var description: String
+    var fileId: String?
+}
+
+
 struct PreparationStepsView: View {
     @Binding var steps: [PreparationStep]
     @State private var newStepDescription: String = ""

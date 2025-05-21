@@ -65,9 +65,9 @@ struct RecipeCardView: View {
                     title: "Masala Chai",
                     description: "A flavorful Indian spiced tea.",
                     steps:  [
-                        PreparationStepSerializable(id: 1, stepNumber: 1, description: "Boil water and spices.", assetId: nil),
-                        PreparationStepSerializable(id:2 ,stepNumber: 2 , description: "Add tea leaves and milk.", assetId: nil),
-                        PreparationStepSerializable(id: 3, stepNumber: 3 ,description: "Simmer and strain.", assetId: nil)
+                        PreparationStepSerializable( stepNumber: 1, description: "Boil water and spices.", assetId: nil),
+                        PreparationStepSerializable(stepNumber: 2 , description: "Add tea leaves and milk.", assetId: nil),
+                        PreparationStepSerializable( stepNumber: 3 ,description: "Simmer and strain.", assetId: nil)
                     ],
                     
                     assetId: "fd2de44e-6952-48be-9497-c5d3a8fef955",
@@ -88,8 +88,7 @@ struct RecipeCardView: View {
         id: 1,
         userId: 1,
         title: "",
-        description: "Masala Chai",
-        instructions: "A flavorful Indian spiced tea.",
+        description: "Masala Chai, A flavorful Indian spiced tea.", type: TeaType.black.rawValue,
         
 //        steps:  [
 //            PreparationStepSerializable(id: 1, stepNumber: 1, description: "Boil water and spices.", assetId: nil),

@@ -11,7 +11,7 @@ import SwiftUI
 struct chaiwalaApp: App {
     var body: some Scene {
         WindowGroup {
-            LandingView()
+            RegisterLoginView().background(ChaiColors.malai)
         }
     }
 }

@@ -9,8 +9,8 @@ import Foundation
 class AuthService {
     static let shared = AuthService()
     
-    func login(username: String, password: String) async -> Result<AuthResponse, NetworkError> {
-        let req = LoginRequest(username: username, password: password)
+    func login(email: String, password: String) async -> Result<AuthResponse, NetworkError> {
+        let req = LoginRequest(email: email, password: password)
         
         let res: Result<AuthResponse, NetworkError> = await APIClient.shared.request(
             method: "POST",
@@ -31,8 +31,8 @@ class AuthService {
     }
 
 
-    func register(name: String, email: String, password: String) async -> Result<AuthResponse, NetworkError> {
-        let req = RegisterRequest(name: name, email: email, password: password)
+    func register(email: String, password: String) async -> Result<AuthResponse, NetworkError> {
+        let req = RegisterRequest(email: email, password: password)
         let res: Result<AuthResponse, NetworkError> = await APIClient.shared.request(
             method: "POST",
             path: "/auth/register",
@@ -80,9 +80,10 @@ class AuthService {
     }
     
     func getFreshAuthToken() async -> String? {
-        let accessToken = validateKeyChainToken(key: "accessToken")
+        var accessToken = validateKeyChainToken(key: "accessToken")
         
         if accessToken != nil {
+            print("fresh token is access")
             return accessToken
         }
         
@@ -100,7 +101,8 @@ class AuthService {
         
         switch res {
         case .success(let token):
-            return token.accessToken
+            // must always return accessToken
+            return validateKeyChainToken(key: "accessToken")
         case .failure(let err ):
             print("failed to get new token from refresh token: \(err)")
             return nil

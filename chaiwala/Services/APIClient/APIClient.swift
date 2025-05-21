@@ -22,7 +22,7 @@ class APIClient {
             return .failure(.invalidURL)
         }
 
-        print("attempting to request \(method) \(url)")
+        print("request: \(method) \(url)")
 
         var request = URLRequest(url: url)
         request.httpMethod = method
@@ -45,7 +45,7 @@ class APIClient {
 
             if (200..<300).contains(httpResponse.statusCode) {
                 do {
-                    print("what was repsonse text", data)
+                    print("successful request, num bytes:", data)
                     let decoded = try JSONDecoder().decode(T.self, from: data)
                     return .success(decoded)
                 } catch {
