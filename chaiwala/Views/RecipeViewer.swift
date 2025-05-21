@@ -28,19 +28,14 @@ struct ShareButton: View {
         }) {
             HStack {
                 Image(systemName: "square.and.arrow.up")
-                    .font(.system(size: 16))
+                    .font(.custom("Winky Sans", size: 16))
                 Text("Share Recipe")
-                    .font(.system(size: 16, weight: .medium))
+                    .font(.custom("Winky Sans", size: 16))
+                    .fontWeight(.medium)
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [cinnamonBrown, deepAmber]),
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
+            .background(ChaiColors.orangeAccent) // Updated background
             .foregroundColor(.white)
             .cornerRadius(10)
         }
@@ -72,7 +67,7 @@ struct RecipeViewer: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 0) {
-                // Header Image with Overlay
+                // Header Image (No Overlay)
                 ZStack(alignment: .topLeading) {
                     CustomAsyncImage(recipe.assetId) { image in
                         image
@@ -81,79 +76,80 @@ struct RecipeViewer: View {
                             .frame(height: 300)
                             .clipped()
                     } placeholder: {
-                        Color(hex: "E8DFD5")
+                        ChaiColors.warmCream // Placeholder color
                             .frame(height: 300)
                             .overlay(
                                 ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: cinnamonBrown))
+                                    .progressViewStyle(CircularProgressViewStyle(tint: ChaiColors.cinnamonBrown))
                             )
                     }
                     
-                    // Navigation and favorite buttons - modern style
+                    // Navigation and favorite buttons
                     HStack {
                         Button(action: {
                             dismiss()
                         }) {
                             Image(systemName: "arrow.left")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(deepAmber)
+                                .font(.custom("Winky Sans", size: 18))
+                                .fontWeight(.medium)
+                                .foregroundColor(ChaiColors.cinnamonBrown) // Updated color
                         }
                         .frame(width: 44, height: 44)
+                        .background(Color.black.opacity(0.1)) // Subtle background for visibility
+                        .clipShape(Circle())
                         .contentShape(Rectangle())
                         
                         Spacer()
                         
                         Button(action: {
-                            print("touch button")
                             isFavorite.toggle()
                             // todo: add favoriting logic
                         }) {
                             Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                .font(.system(size: 18, weight: .medium))
-                                .foregroundColor(isFavorite ? terracotta : .white)
+                                .font(.custom("Winky Sans", size: 18))
+                                .fontWeight(.medium)
+                                .foregroundColor(isFavorite ? ChaiColors.orangeAccent : ChaiColors.warmCream) // Updated colors
                         }
                         .frame(width: 44, height: 44)
+                        .background(Color.black.opacity(0.1)) // Subtle background for visibility
+                        .clipShape(Circle())
                         .contentShape(Rectangle())
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 16)
-                    
-                    // Recipe title and time info
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text(recipe.title)
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(.white)
-                            .shadow(color: Color.black.opacity(0.5), radius: 4, x: 0, y: 2)
-                        
-                        HStack(spacing: 16) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "clock.fill")
-                                    .foregroundColor(.white)
-                                Text("\(recipe.prepTimeMinutes) mins")
-                                    .foregroundColor(.white)
-                            }
-                            .font(.system(size: 15, weight: .medium))
-                            
-                            HStack(spacing: 6) {
-                                Image(systemName: "person.2.fill")
-                                    .foregroundColor(.white)
-                                Text("\(recipe.servings) servings")
-                                    .foregroundColor(.white)
-                            }
-                            .font(.system(size: 15, weight: .medium))
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 24)
-                    .frame(maxWidth: .infinity, maxHeight: 300, alignment: .bottomLeading)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [.clear, .black.opacity(0.7)]),
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    )
+                    .padding(.horizontal, 16) // Adjusted padding
+                    .padding(.top, (UIApplication.shared.connectedScenes
+                        .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                        .first?.safeAreaInsets.top ?? 0) + ((UIApplication.shared.connectedScenes
+                        .compactMap { ($0 as? UIWindowScene)?.keyWindow }
+                        .first?.safeAreaInsets.top ?? 0) > 0 ? 10 : 20)) // Modern safe area + conditional padding
                 }
+
+                // Recipe Title and Time Info (Moved Below Image)
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(recipe.title)
+                        .font(.custom("Winky Sans", size: 28)) // Slightly smaller for below-image context
+                        .fontWeight(.bold)
+                        .foregroundColor(ChaiColors.cinnamonBrown)
+                    
+                    HStack(spacing: 16) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "clock.fill")
+                            Text("\(recipe.prepTimeMinutes) mins")
+                        }
+                        .font(.custom("Winky Sans", size: 15))
+                        .fontWeight(.medium)
+                        .foregroundColor(ChaiColors.kadakGreen)
+                        
+                        HStack(spacing: 6) {
+                            Image(systemName: "person.2.fill")
+                            Text("\(recipe.servings) servings")
+                        }
+                        .font(.custom("Winky Sans", size: 15))
+                        .fontWeight(.medium)
+                        .foregroundColor(ChaiColors.kadakGreen)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16) // Added vertical padding
                 
                 // Tab selection
                 HStack(spacing: 0) {
@@ -166,15 +162,15 @@ struct RecipeViewer: View {
                     }
                 }
                 .padding(.top, 16)
+                .background(Color(UIColor.systemBackground)) // Match CreateRecipeV2
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(Color(UIColor.systemGray5)), // Match CreateRecipeV2
+                    alignment: .bottom
+                )
                 
-                // Content divider
-                Rectangle()
-                    .fill(activeTab == 0 ?
-                          LinearGradient(gradient: Gradient(colors: [softChai, cinnamonBrown]), startPoint: .leading, endPoint: .trailing) :
-                          LinearGradient(gradient: Gradient(colors: [cinnamonBrown, softChai]), startPoint: .trailing, endPoint: .leading))
-                    .frame(height: 3)
-                
-                // Tab content
+                // Tab content (Content Divider Removed)
                 VStack(alignment: .leading, spacing: 28) {
                     if activeTab == 0 {
                         // Overview tab
@@ -182,12 +178,13 @@ struct RecipeViewer: View {
                             // Description
                             VStack(alignment: .leading, spacing: 12) {
                                 Text("Description")
-                                    .font(.system(size: 20, weight: .semibold))
-                                    .foregroundColor(cinnamonBrown)
+                                    .font(.custom("Winky Sans", size: 20))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(ChaiColors.cinnamonBrown)
                                 
                                 Text(recipe.description)
-                                    .font(.system(size: 16))
-                                    .foregroundColor(Color(hex: "333333"))
+                                    .font(.custom("Winky Sans", size: 16))
+                                    .foregroundColor(ChaiColors.kadakGreen) // Using kadakGreen for general text
                                     .fixedSize(horizontal: false, vertical: true)
                                     .lineSpacing(4)
                             }
@@ -195,74 +192,31 @@ struct RecipeViewer: View {
                             // Info section
                             VStack(alignment: .leading, spacing: 16) {
                                 Text("Information")
-                                    .font(.system(size: 20, weight: .semibold))
-                                    .foregroundColor(cinnamonBrown)
+                                    .font(.custom("Winky Sans", size: 20))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(ChaiColors.cinnamonBrown)
                                 
                                 VStack(spacing: 16) {
-                                    HStack(spacing: 16) {
-                                        InfoCard(
-                                            image: "clock.fill",
-                                            title: "Prep Time",
-                                            value: "\(recipe.prepTimeMinutes) minutes",
-                                            iconColor: cinnamonBrown
-                                        )
-                                        
-                                        InfoCard(
-                                            image: "person.2.fill",
-                                            title: "Servings",
-                                            value: "\(recipe.servings)",
-                                            iconColor: softChai
-                                        )
-                                    }
-                                    
-                                    HStack(spacing: 16) {
-                                        InfoCard(
-                                            image: "calendar",
-                                            title: "Created",
-                                            value: formattedDate(recipe.createdAtDateTime()),
-                                            iconColor: forestGreen
-                                        )
-                                        
-                                        InfoCard(
-                                            image: "arrow.triangle.2.circlepath",
-                                            title: "Updated",
-                                            value: formattedDate(recipe.updatedAtDateTime()),
-                                            iconColor: terracotta
-                                        )
+                                    VStack(spacing: 12) { // Reduced spacing for a cleaner look
+                                        InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
+                                        InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
+                                        InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
+                                        InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
                                     }
                                 }
+                                
+                                // Share button
+                                ShareButton(recipe: recipe) // Re-using the updated ShareButton
+                                    .padding(.top, 8)
                             }
-                            
-                            // Share button
-                            Button(action: {
-                                // Add share functionality
-                            }) {
-                                HStack {
-                                    Image(systemName: "square.and.arrow.up")
-                                        .font(.system(size: 16))
-                                    Text("Share Recipe")
-                                        .font(.system(size: 16, weight: .medium))
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [cinnamonBrown, deepAmber]),
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
-                            }
-                            .padding(.top, 8)
                         }
                     } else {
                         // Instructions tab
                         VStack(alignment: .leading, spacing: 28) {
                             Text("Step-by-Step Instructions")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundColor(cinnamonBrown)
+                                .font(.custom("Winky Sans", size: 20))
+                                .fontWeight(.semibold)
+                                .foregroundColor(ChaiColors.cinnamonBrown)
                             
                             StepByStepInstructions(steps: recipe.steps)
                         }
@@ -274,7 +228,7 @@ struct RecipeViewer: View {
             }
         }
         .edgesIgnoringSafeArea(.top)
-        .background(backgroundCream)
+        .background(ChaiColors.malai)
         .navigationBarHidden(true)
     }
     
@@ -296,49 +250,55 @@ struct TabButton: View {
     
     var body: some View {
         Button(action: action) {
-            VStack(spacing: 8) {
+            VStack(spacing: 8) { // Matches TabButtonV2 spacing
                 Text(title)
-                    .font(.headline)
-                    .foregroundColor(isSelected ? cinnamonBrown : .gray)
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
+                    .font(.custom("Winky Sans", size: 16)) // Adjusted size to match TabButtonV2 more closely if needed
+                    .fontWeight(isSelected ? .semibold : .regular) // Match TabButtonV2
+                    .foregroundColor(isSelected ? ChaiColors.cinnamonBrown : Color(.systemGray)) // Match TabButtonV2
+                    .padding(.vertical, 12) // Match TabButtonV2
                 
-                Rectangle()
-                    .frame(height: 3)
-                    .foregroundColor(isSelected ? cinnamonBrown : warmCream)
+                if isSelected {
+                    Rectangle()
+                        .fill(ChaiColors.cinnamonBrown) // Match TabButtonV2 selected state
+                        .frame(height: 2) // Match TabButtonV2
+                } else {
+                    Rectangle()
+                        .fill(Color.clear) // Match TabButtonV2 unselected state
+                        .frame(height: 2) // Match TabButtonV2
+                }
             }
         }
         .frame(maxWidth: .infinity)
+        .buttonStyle(PlainButtonStyle()) // Match TabButtonV2
     }
 }
 
-struct InfoCard: View {
+// Redesigned InfoCard to InfoDetailRow for minimalism
+struct InfoDetailRow: View {
     let image: String
     let title: String
     let value: String
     let iconColor: Color
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Image(systemName: image)
-                    .foregroundColor(iconColor)
-                    .font(.system(size: 16))
-                
-                Text(title)
-                    .font(.system(size: 14))
-                    .foregroundColor(Color.gray.opacity(0.8))
-            }
+        HStack(spacing: 12) {
+            Image(systemName: image)
+                .foregroundColor(iconColor)
+                .font(.custom("Winky Sans", size: 16))
+                .frame(width: 20, alignment: .center) // Align icons
+            
+            Text(title)
+                .font(.custom("Winky Sans", size: 15))
+                .foregroundColor(ChaiColors.cinnamonBrown)
+            
+            Spacer()
             
             Text(value)
-                .font(.system(size: 16, weight: .medium))
-                .foregroundColor(Color(hex: "333333"))
+                .font(.custom("Winky Sans", size: 15))
+                .fontWeight(.medium)
+                .foregroundColor(ChaiColors.kadakGreen)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(warmCream)
-        .cornerRadius(10)
+        .padding(.vertical, 4) // Minimal vertical padding
     }
 }
 
@@ -364,23 +324,18 @@ struct StepView: View {
                 // Step number with gradient background
                 ZStack {
                     Circle()
-                        .fill(
-                            LinearGradient(
-                                gradient: Gradient(colors: [deepAmber, cinnamonBrown]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
+                        .fill(ChaiColors.orangeAccent) // Solid color fill
                         .frame(width: 34, height: 34)
                     
                     Text("\(step.stepNumber)")
-                        .font(.system(size: 16, weight: .bold))
+                        .font(.custom("Winky Sans", size: 16))
+                        .fontWeight(.bold)
                         .foregroundColor(.white)
                 }
                 
                 Text(step.description)
-                    .font(.system(size: 16))
-                    .foregroundColor(Color(hex: "333333"))
+                    .font(.custom("Winky Sans", size: 16))
+                    .foregroundColor(ChaiColors.kadakGreen) // Using kadakGreen for general text
                     .fixedSize(horizontal: false, vertical: true)
                     .lineSpacing(4)
             }
@@ -396,11 +351,11 @@ struct StepView: View {
                         .cornerRadius(12)
                 } placeholder: {
                     RoundedRectangle(cornerRadius: 12)
-                        .fill(Color(hex: "E8DFD5"))
+                        .fill(ChaiColors.warmCream) // Using warmCream for placeholder background
                         .frame(height: 180)
                         .overlay(
                             ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: cinnamonBrown))
+                                .progressViewStyle(CircularProgressViewStyle(tint: ChaiColors.cinnamonBrown))
                         )
                 }
                 .padding(.leading, 50) // Align with the step text
