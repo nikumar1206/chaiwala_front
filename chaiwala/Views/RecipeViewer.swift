@@ -197,17 +197,18 @@ struct RecipeViewer: View {
                                     .foregroundColor(ChaiColors.cinnamonBrown)
                                 
                                 VStack(spacing: 16) {
-                                VStack(spacing: 12) { // Reduced spacing for a cleaner look
-                                    InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
-                                    InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
-                                    InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
-                                    InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
+                                    VStack(spacing: 12) { // Reduced spacing for a cleaner look
+                                        InfoDetailRow(image: "clock.fill", title: "Prep Time", value: "\(recipe.prepTimeMinutes) minutes", iconColor: ChaiColors.cinnamonBrown)
+                                        InfoDetailRow(image: "person.2.fill", title: "Servings", value: "\(recipe.servings)", iconColor: ChaiColors.softChai)
+                                        InfoDetailRow(image: "calendar", title: "Created", value: formattedDate(recipe.createdAtDateTime()), iconColor: ChaiColors.forestGreen)
+                                        InfoDetailRow(image: "arrow.triangle.2.circlepath", title: "Updated", value: formattedDate(recipe.updatedAtDateTime()), iconColor: ChaiColors.terracotta)
+                                    }
                                 }
+                                
+                                // Share button
+                                ShareButton(recipe: recipe) // Re-using the updated ShareButton
+                                    .padding(.top, 8)
                             }
-                            
-                            // Share button
-                            ShareButton(recipe: recipe) // Re-using the updated ShareButton
-                                .padding(.top, 8)
                         }
                     } else {
                         // Instructions tab
